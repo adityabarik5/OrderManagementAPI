@@ -31,4 +31,19 @@ public class ApiResponse<T> {
     public Map<String, String> getErrors() {
         return errors;
     }
+
+    // SUCCESS RESPONSE
+    public static <T> ApiResponse<T> success(String message, T data) {
+        return new ApiResponse<>(true, message, data, null);
+    }
+
+    // ERROR RESPONSE
+    public static <T> ApiResponse<T> error(String message, Map<String, String> errors) {
+        return new ApiResponse<>(false, message, null, errors);
+    }
+
+    // SUCCESS RESPONSE ONLY DATA
+    public static <T> ApiResponse<T> success(T data) {
+        return new ApiResponse<>(true, "Request successful", data, null);
+    }
 }

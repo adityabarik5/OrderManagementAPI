@@ -2,10 +2,11 @@ com\practice\orderapp\exception\GlobalExceptionHandler.class
 com\practice\orderapp\dto\OrderRequest.class
 com\practice\orderapp\interceptor\RequestLoggingInterceptor.class
 com\practice\orderapp\repository\OrderRepository.class
+com\practice\orderapp\model\OrderDTO.class
 com\practice\orderapp\OrderAppApplication.class
 com\practice\orderapp\common\ApiResponse.class
-com\practice\orderapp\model\Order.class
 com\practice\orderapp\service\OrderService.class
+com\practice\orderapp\dto\UpdateOrderNameRequest.class
 com\practice\orderapp\entity\Order.class
 com\practice\orderapp\dto\OrderResponse.class
 com\practice\orderapp\config\WebConfig.class

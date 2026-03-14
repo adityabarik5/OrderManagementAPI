@@ -1,37 +1,38 @@
 package com.practice.orderapp.controller;
 
-import com.practice.orderapp.common.ApiResponse;
 import com.practice.orderapp.dto.OrderRequest;
-import com.practice.orderapp.dto.OrderResponse;
+import com.practice.orderapp.entity.Order;
 import com.practice.orderapp.service.OrderService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/orders")
+@RequiredArgsConstructor
 public class OrderController {
 
-    private final OrderService service;
-
-    public OrderController(OrderService service) {
-        this.service = service;
-    }
+    private final OrderService orderService;
 
     @PostMapping
-    public ResponseEntity<ApiResponse<OrderResponse>> createOrder(@Valid @RequestBody OrderRequest request) {
+    public Order createOrder(@RequestBody OrderRequest request) {
+        return orderService.createOrder(request);
+    }
 
-        String id = service.createOrder(request);
+    @GetMapping
+    public List<Order> getAllOrders() {
+        return orderService.getAllOrders();
+    }
 
-        OrderResponse response = new OrderResponse("Order created successfully", id);
+    @GetMapping("/{id}")
+    public Order getOrder(@PathVariable Long id) {
+        return orderService.getOrderById(id);
+    }
 
-        ApiResponse<OrderResponse> apiResponse =
-                new ApiResponse<>(true, "Order processed successfully", response, null);
-
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(apiResponse);
+    @DeleteMapping("/{id}")
+    public String deleteOrder(@PathVariable Long id) {
+        orderService.deleteOrder(id);
+        return "Order deleted successfully";
     }
 }

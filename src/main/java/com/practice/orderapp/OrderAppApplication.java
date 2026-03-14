@@ -24,4 +24,11 @@ The project now includes:
 ✔ Request logging interceptor
 ✔ Standard API response wrapper
 ✔ Lombok for clean code
+
+To be added:
+1️⃣ MySQL + JPA integration
+2️⃣ Pagination + sorting
+3️⃣ Swagger documentation
+4️⃣ Docker container
+5️⃣ Order status workflow
 */

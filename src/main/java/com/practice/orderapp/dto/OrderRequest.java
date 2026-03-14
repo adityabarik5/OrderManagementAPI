@@ -15,4 +15,7 @@ public class OrderRequest {
 
     @Positive(message = "Price must be greater than zero")
     private double price;
+
+    @Positive(message = "Quantity must be greater than zero")
+    private int Quantity;
 }

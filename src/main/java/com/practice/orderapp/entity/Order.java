@@ -1,5 +1,6 @@
 package com.practice.orderapp.entity;
 
+import com.practice.orderapp.model.OrderStatus;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -14,10 +15,9 @@ public class Order {
     private Long id;
 
     private String productName;
-
     private int quantity;
-
     private double price;
 
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status;
 }

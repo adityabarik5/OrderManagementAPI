@@ -13,7 +13,6 @@ public class OrderAppApplication {
 
 /*
 The project now includes:
-
 ✔ Maven project
 ✔ Spring Boot REST API
 ✔ Controller / Service / Repository architecture
@@ -25,10 +24,10 @@ The project now includes:
 ✔ Standard API response wrapper
 ✔ Lombok for clean code
 ✔ MySQL + JPA integration
+✔ Pagination + sorting
+✔ Swagger documentation // http://localhost:8080/swagger-ui/index.html
+✔ Order status workflow
 
 To be added:
-1️⃣ Pagination + sorting
-2️⃣ Swagger documentation
-3️⃣ Docker container
-4️⃣ Order status workflow
+1️⃣ Docker container
 */

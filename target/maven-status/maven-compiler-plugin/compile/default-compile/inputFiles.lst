@@ -2,6 +2,7 @@ C:\Java Practice\OrderManagementAPI\src\main\java\com\practice\orderapp\common\A
 C:\Java Practice\OrderManagementAPI\src\main\java\com\practice\orderapp\dto\OrderResponse.java
 C:\Java Practice\OrderManagementAPI\src\main\java\com\practice\orderapp\entity\Order.java
 C:\Java Practice\OrderManagementAPI\src\main\java\com\practice\orderapp\filter\CorrelationIdFilter.java
+C:\Java Practice\OrderManagementAPI\src\main\java\com\practice\orderapp\dto\UpdateOrderNameRequest.java
 C:\Java Practice\OrderManagementAPI\src\main\java\com\practice\orderapp\controller\OrderController.java
 C:\Java Practice\OrderManagementAPI\src\main\java\com\practice\orderapp\OrderAppApplication.java
 C:\Java Practice\OrderManagementAPI\src\main\java\com\practice\orderapp\model\OrderDTO.java

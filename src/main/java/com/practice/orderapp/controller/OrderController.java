@@ -32,8 +32,9 @@ public class OrderController {
     @Operation(summary = "Create a new order", description = "Creates an order with product name, quantity and price")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Order createOrder(@Valid @RequestBody OrderRequest request) {
-        return orderService.createOrder(request);
+    public ApiResponse<Order> createOrder(@Valid @RequestBody OrderRequest request) {
+        Order order = orderService.createOrder(request);
+        return ApiResponse.success("Order created successfully", order);
     }
 
     @Operation(summary = "Fetch all orders with pagination and sorting")
@@ -49,16 +50,17 @@ public class OrderController {
     @Operation(summary = "Fetch order details by ID")
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Order getOrder(@PathVariable Long id) {
-        return orderService.getOrderById(id);
+    public ApiResponse<Order> getOrder(@PathVariable Long id) {
+        Order order = orderService.getOrderById(id);
+        return ApiResponse.success("Order fetched successfully", order);
     }
 
     @Operation(summary = "Delete an order by ID")
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public String deleteOrder(@PathVariable Long id) {
+    @ResponseStatus(HttpStatus.OK)
+    public ApiResponse<Void> deleteOrder(@PathVariable Long id) {
         orderService.deleteOrder(id);
-        return "Order deleted successfully";
+        return ApiResponse.success("Order deleted successfully", null);
     }
 
     @Operation(summary = "Update the product name of an order")
@@ -73,7 +75,7 @@ public class OrderController {
 
     @Operation(summary = "Update order status")
     @PatchMapping("/status/{id}")
-    public ApiResponse<Order> updateOrderStatus(@PathVariable Long id, @RequestBody UpdateOrderStatusRequest request) {
+    public ApiResponse<Order> updateOrderStatus(@PathVariable Long id, @Valid @RequestBody UpdateOrderStatusRequest request) {
 
         return ApiResponse.success("Order status updated successfully", orderService.updateOrderStatus(id, request.getStatus()));
     }

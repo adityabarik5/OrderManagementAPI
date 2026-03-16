@@ -1,176 +1,281 @@
-# Order Management API
+# Order Management REST API
 
-A simple RESTful Order Management backend built using Java and Spring Boot.
-This project demonstrates common backend engineering practices such as layered architecture, validation, standardized API responses, pagination, and order lifecycle management.
+A production-style **Spring Boot REST API** for managing orders with validation, logging, status workflow, pagination, and API documentation. This project demonstrates clean backend architecture and common enterprise patterns used in real-world Java applications.
 
 ---
 
-## Features
+# 🚀 Features
 
-* Create orders
-* Retrieve orders (single or paginated list)
-* Update order name
-* Update order status
-* Delete orders
-* Order status lifecycle with transition validation
+* Maven-based Spring Boot project
+* Layered architecture (**Controller → Service → Repository**)
+* RESTful CRUD APIs
+* DTO validation using `@Valid`
 * Global exception handling
-* Request validation
+* Custom exceptions
 * Standard API response wrapper
-* Pagination and sorting
+* Request logging
+* Correlation ID tracking using MDC
+* SLF4J logging
+* MySQL database integration
+* JPA/Hibernate ORM
+* Pagination and sorting support
 * Swagger API documentation
-* Logging with correlation ID support
+* Order status workflow validation
+* Order status history tracking
+* Lombok to reduce boilerplate code
 
 ---
 
-## Tech Stack
+# 🏗️ Project Architecture
+
+```
+Controller
+   ↓
+Service
+   ↓
+Repository
+   ↓
+Database
+```
+
+Additional supporting layers:
+
+```
+config
+common
+dto
+entity
+exception
+interceptor
+repository
+service
+```
+
+---
+
+# 📦 Tech Stack
 
 * Java 8
-* Spring Boot 2.7
+* Spring Boot
 * Spring Web
 * Spring Data JPA
-* Hibernate
-* Maven
 * MySQL
-* Swagger (OpenAPI) for API documentation
+* Maven
+* Lombok
+* Swagger / OpenAPI
+* SLF4J Logging
 
 ---
 
-## Project Structure
+# 📁 Project Structure
 
 ```
-com.practice.orderapp
+orderapp
 │
-├── controller        # REST controllers
-├── service           # Business logic
-├── repository        # Data access layer
-├── dto               # Request/Response DTOs
-├── model             # Entities and enums
-├── common            # ApiResponse wrapper, utilities
-└── config            # Configuration classes
+├── config
+│   └── SwaggerConfig
+│
+├── common
+│   └── ApiResponse
+│
+├── controller
+│   └── OrderController
+│
+├── dto
+│   └── OrderRequest
+│
+├── entity
+│   ├── Order
+│   ├── OrderStatus
+│   └── OrderStatusHistory
+│
+├── exception
+│   ├── GlobalExceptionHandler
+│   ├── OrderNotFoundException
+│   └── InvalidOrderStatusException
+│
+├── interceptor
+│   └── RequestLoggingInterceptor
+│
+├── repository
+│   ├── OrderRepository
+│   └── OrderStatusHistoryRepository
+│
+├── service
+│   └── OrderService
+│
+└── OrderAppApplication
 ```
 
 ---
 
-## Order Lifecycle
+# 📌 API Endpoints
 
-Orders follow a controlled status lifecycle.
-
-```
-CREATED → CONFIRMED → SHIPPED → DELIVERED
-     ↓
-  CANCELLED
-```
-
-Allowed transitions:
-
-* CREATED → CONFIRMED
-* CREATED → CANCELLED
-* CONFIRMED → SHIPPED
-* CONFIRMED → CANCELLED
-* SHIPPED → DELIVERED
-
-Invalid transitions are rejected by the API.
-
----
-
-## API Endpoints
-
-### Create Order
+## Create Order
 
 ```
 POST /orders
 ```
 
-Example request:
-
-```json
-{
-  "productName": "Laptop",
-  "quantity": 2,
-  "price": 75000
-}
-```
+Creates a new order.
 
 ---
 
-### Get All Orders
-
-```
-GET /orders?page=0&size=10&sort=price,desc
-```
-
-Supports pagination and sorting.
-
----
-
-### Get Order By ID
+## Get Order by ID
 
 ```
 GET /orders/{id}
 ```
 
----
-
-### Update Order Name
-
-```
-PATCH /orders/{id}/name
-```
-
-Example request:
-
-```json
-{
-  "name": "Gaming Laptop"
-}
-```
+Returns details of a specific order.
 
 ---
 
-### Update Order Status
+## Get All Orders (Pagination + Sorting)
+
+```
+GET /orders?page=0&size=10&sort=id,desc
+```
+
+Returns paginated list of orders.
+
+---
+
+## Update Order Name
+
+```
+PUT /orders/{id}/name
+```
+
+Updates the order product name.
+
+---
+
+## Update Order Status
 
 ```
 PATCH /orders/{id}/status
 ```
 
-Example request:
-
-```json
-{
-  "status": "CONFIRMED"
-}
-```
-
-Available statuses:
-
-```
-CREATED
-CONFIRMED
-SHIPPED
-DELIVERED
-CANCELLED
-```
+Updates the order status while validating workflow transitions.
 
 ---
 
-### Delete Order
+## Delete Order
 
 ```
 DELETE /orders/{id}
 ```
 
+Deletes an order.
+
 ---
 
-## Running the Application
+# 🔄 Order Status Workflow
 
-Clone the repository:
+Orders follow a controlled status lifecycle:
 
 ```
-git clone https://github.com/your-username/order-management-api.git
-cd order-management-api
+CREATED → PROCESSING → SHIPPED → DELIVERED
 ```
 
-Run the application:
+Invalid transitions are rejected with a proper error response.
+
+Example:
+
+```
+DELIVERED → PROCESSING ❌ (Not allowed)
+```
+
+Every status change is stored in **OrderStatusHistory** for tracking.
+
+---
+
+# 📊 Standard API Response Format
+
+All APIs return a consistent response structure:
+
+```json
+{
+  "success": true,
+  "message": "Order fetched successfully",
+  "data": {
+    "id": 1,
+    "productName": "Laptop",
+    "quantity": 1,
+    "status": "CREATED"
+  }
+}
+```
+
+---
+
+# 📖 API Documentation
+
+Swagger UI is available at:
+
+```
+http://localhost:8080/swagger-ui/index.html
+```
+
+It provides interactive documentation to test all endpoints.
+
+---
+
+# 🧾 Logging Features
+
+The project includes structured logging with:
+
+* Request logging interceptor
+* Correlation ID for tracing requests
+* SLF4J logging
+
+Example log output:
+
+```
+[CorrelationID: 9f3a1] Incoming request: GET /orders/1
+```
+
+This helps trace requests across logs in distributed systems.
+
+---
+
+# ⚙️ Database Configuration
+
+Update the database configuration in:
+
+```
+src/main/resources/application.properties
+```
+
+Example:
+
+```
+spring.datasource.url=jdbc:mysql://localhost:3306/orderdb
+spring.datasource.username=root
+spring.datasource.password=password
+
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+```
+
+---
+
+# ▶️ Running the Application
+
+### 1. Clone the Repository
+
+```
+git clone https://github.com/<your-username>/orderapp.git
+```
+
+### 2. Navigate to the project
+
+```
+cd orderapp
+```
+
+### 3. Run the application
 
 ```
 mvn spring-boot:run
@@ -184,50 +289,55 @@ http://localhost:8080
 
 ---
 
-## API Documentation
+# 🐳 Planned Improvement
 
-Swagger UI is available at:
+The next planned enhancement is **Docker support**.
+
+Docker will allow the application to run using containers without manual environment setup.
+
+Planned additions:
+
+* Dockerfile
+* Docker Compose (Spring Boot + MySQL)
+* One-command startup
+
+Example (future):
 
 ```
-http://localhost:8080/swagger-ui.html
-```
-
-This interface allows you to explore and test all endpoints directly from the browser.
-
----
-
-## Example API Response Format
-
-All responses follow a standardized structure:
-
-```json
-{
-  "success": true,
-  "message": "Order fetched successfully",
-  "data": {
-    "id": 1,
-    "productName": "Laptop",
-    "quantity": 2,
-    "price": 75000,
-    "status": "CREATED"
-  },
-  "errors": null
-}
+docker-compose up
 ```
 
 ---
 
-## Future Improvements
+# 🎯 Learning Objectives of This Project
 
-* Order status history tracking
-* Unit tests (JUnit + Mockito)
+This project demonstrates:
+
+* Building REST APIs with Spring Boot
+* Clean backend architecture
+* Proper exception handling
+* Logging and request tracing
+* API documentation with Swagger
+* Database persistence with JPA
+* Pagination and sorting
+* Business workflow validation
+
+---
+
+# 📌 Future Enhancements
+
+Possible improvements:
+
 * Docker containerization
-* Authentication and authorization
+* Authentication (JWT / Spring Security)
+* Unit testing with JUnit & Mockito
+* Integration tests
+* CI/CD pipeline
 * API versioning
-* Rate limiting
+* Caching with Redis
 
 ---
 
-## Author
+# 👨‍💻 Aditya
 
-Developed as a backend practice project to demonstrate modern Spring Boot API design.
+Backend practice project focused on building production-ready REST APIs using Spring Boot.

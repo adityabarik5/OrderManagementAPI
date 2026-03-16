@@ -1,5 +1,7 @@
 package com.practice.orderapp.filter;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Component;
 
@@ -11,6 +13,7 @@ import java.util.UUID;
 @Component
 public class CorrelationIdFilter implements Filter {
 
+    private static final Logger log = LoggerFactory.getLogger(CorrelationIdFilter.class);
     private static final String CORRELATION_ID = "CID";
     private static final String HEADER_NAME = "X-Correlation-ID";
 
@@ -20,21 +23,18 @@ public class CorrelationIdFilter implements Filter {
         try {
 
             HttpServletRequest httpRequest = (HttpServletRequest) request;
-
             String cid = httpRequest.getHeader(HEADER_NAME);
 
             if (cid == null || cid.isEmpty()) {
                 cid = UUID.randomUUID().toString();
             }
 
+            log.info("Correlation ID: {}", cid);
             MDC.put(CORRELATION_ID, cid);
-
             chain.doFilter(request, response);
 
         } finally {
-
             MDC.remove(CORRELATION_ID); //This is extremely important because Spring Boot uses thread pools. Without clean up you get MDC memory leaks
-
         }
     }
 }

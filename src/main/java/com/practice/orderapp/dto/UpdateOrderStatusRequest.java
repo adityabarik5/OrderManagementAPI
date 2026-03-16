@@ -1,6 +1,6 @@
 package com.practice.orderapp.dto;
 
-import com.practice.orderapp.model.OrderStatus;
+import com.practice.orderapp.entity.OrderStatus;
 
 public class UpdateOrderStatusRequest {
 

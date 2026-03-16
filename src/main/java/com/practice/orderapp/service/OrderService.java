@@ -2,8 +2,12 @@ package com.practice.orderapp.service;
 
 import com.practice.orderapp.dto.OrderRequest;
 import com.practice.orderapp.entity.Order;
-import com.practice.orderapp.model.OrderStatus;
+import com.practice.orderapp.entity.OrderStatus;
+import com.practice.orderapp.entity.OrderStatusHistory;
+import com.practice.orderapp.exception.InvalidOrderStatusException;
+import com.practice.orderapp.exception.OrderNotFoundException;
 import com.practice.orderapp.repository.OrderRepository;
+import com.practice.orderapp.repository.OrderStatusHistoryRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -15,6 +19,7 @@ import org.springframework.stereotype.Service;
 public class OrderService {
 
     private final OrderRepository orderRepository;
+    private final OrderStatusHistoryRepository orderStatusHistoryRepository;
 
     public Order createOrder(OrderRequest request) {
 
@@ -35,7 +40,7 @@ public class OrderService {
     }
 
     public Order getOrderById(Long id) {
-        return orderRepository.findById(id).orElseThrow(() -> new RuntimeException("Order not found with id " + id));
+        return orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundException(id));
     }
 
     public void deleteOrder(Long id) {
@@ -44,7 +49,7 @@ public class OrderService {
 
     public Order updateOrderName(Long id, String name) {
 
-        Order order = orderRepository.findById(id).orElseThrow(() -> new RuntimeException("Order not found with id " + id));
+        Order order = orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundException(id));
 
         order.setProductName(name);
 
@@ -53,16 +58,22 @@ public class OrderService {
 
     public Order updateOrderStatus(Long id, OrderStatus newStatus) {
 
-        Order order = orderRepository.findById(id).orElseThrow(() -> new RuntimeException("Order not found"));
+        Order order = orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundException(id));
 
         OrderStatus currentStatus = order.getStatus();
 
         if (!currentStatus.canTransitionTo(newStatus)) {
-            throw new RuntimeException("Invalid status transition from " + currentStatus + " to " + newStatus);
+            throw new InvalidOrderStatusException("Invalid status transition from " + currentStatus + " to " + newStatus);
         }
 
         order.setStatus(newStatus);
+        Order updatedOrder = orderRepository.save(order);
 
-        return orderRepository.save(order);
+        // save history
+        OrderStatusHistory history = new OrderStatusHistory(id, currentStatus, newStatus);
+
+        orderStatusHistoryRepository.save(history);
+
+        return updatedOrder;
     }
 }

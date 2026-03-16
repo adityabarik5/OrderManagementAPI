@@ -1,14 +1,10 @@
-package com.practice.orderapp.model;
+package com.practice.orderapp.entity;
 
 import java.util.Arrays;
 
 public enum OrderStatus {
 
-    CREATED,
-    CONFIRMED,
-    SHIPPED,
-    DELIVERED,
-    CANCELLED;
+    CREATED, CONFIRMED, SHIPPED, DELIVERED, CANCELLED;
 
     public boolean canTransitionTo(OrderStatus newStatus) {
 

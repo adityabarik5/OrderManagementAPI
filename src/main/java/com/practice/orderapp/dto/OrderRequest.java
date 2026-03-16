@@ -1,11 +1,11 @@
 package com.practice.orderapp.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
-import io.swagger.v3.oas.annotations.media.Schema;
 
 @Getter
 @Setter

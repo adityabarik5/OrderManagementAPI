@@ -12,22 +12,28 @@ public class OrderAppApplication {
 }
 
 /*
-The project now includes:
-✔ Maven project
-✔ Spring Boot REST API
-✔ Controller / Service / Repository architecture
-✔ DTO validation
-✔ Global exception handling
+✔ Maven project setup using Apache Maven
+✔ REST API built with Spring Boot
+✔ Layered architecture (Controller → Service → Repository)
+✔ DTO-based request handling with validation
+✔ Global exception handling with custom exceptions
 ✔ SLF4J logging
-✔ Correlation ID with MDC
+✔ Correlation ID tracking using MDC
+✔ Request correlation filter
 ✔ Request logging interceptor
-✔ Standard API response wrapper
-✔ Lombok for clean code
-✔ MySQL + JPA integration
-✔ Pagination + sorting
-✔ Swagger documentation // http://localhost:8080/swagger-ui/index.html
-✔ Order status workflow
+✔ Standardized API response wrapper (ApiResponse<T>)
+✔ Lombok to reduce boilerplate
+✔ MySQL integration with Hibernate via JPA
+✔ Pagination and sorting for order retrieval
+✔ API documentation using Swagger UI
+✔ Order status workflow with transition validation
+✔ Order status history tracking (audit trail)
+
+Swagger available at:
+
+http://localhost:8080/swagger-ui/index.html
 
 To be added:
+
 1️⃣ Docker container
 */

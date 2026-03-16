@@ -1,12 +1,13 @@
 package com.practice.orderapp.exception;
 
 import com.practice.orderapp.common.ApiResponse;
-import lombok.extern.slf4j.Slf4j;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.HashMap;
@@ -39,5 +40,17 @@ public class GlobalExceptionHandler {
         ApiResponse<Object> response = new ApiResponse<>(false, "Validation failed", null, errors);
 
         return ResponseEntity.badRequest().body(response);
+    }
+
+    @ExceptionHandler(OrderNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ApiResponse<?> handleOrderNotFound(OrderNotFoundException ex) {
+        return new ApiResponse<>(false, ex.getMessage(), null, null);
+    }
+
+    @ExceptionHandler(InvalidOrderStatusException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiResponse<?> handleInvalidStatus(InvalidOrderStatusException ex) {
+        return new ApiResponse<>(false, ex.getMessage(), null, null);
     }
 }

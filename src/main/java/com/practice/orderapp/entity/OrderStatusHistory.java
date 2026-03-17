@@ -36,4 +36,10 @@ public class OrderStatusHistory {
         this.changedAt = LocalDateTime.now();
     }
 
+    public OrderStatusHistory(Long orderId, OrderStatus newStatus) {
+        this.orderId = orderId;
+        this.newStatus = newStatus;
+        this.changedAt = LocalDateTime.now();
+    }
+
 }

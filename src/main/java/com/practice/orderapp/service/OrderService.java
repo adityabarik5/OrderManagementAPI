@@ -31,7 +31,12 @@ public class OrderService {
 
         order.setStatus(OrderStatus.CREATED);
 
-        return orderRepository.save(order);
+        Order savedOrder = orderRepository.save(order);
+
+        OrderStatusHistory history = new OrderStatusHistory(savedOrder.getId(),OrderStatus.CREATED);
+        orderStatusHistoryRepository.save(history);
+
+        return savedOrder;
     }
 
     @Operation(summary = "Fetch all orders with pagination and sorting")
@@ -50,7 +55,6 @@ public class OrderService {
     public Order updateOrderName(Long id, String name) {
 
         Order order = orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundException(id));
-
         order.setProductName(name);
 
         return orderRepository.save(order);
@@ -71,7 +75,6 @@ public class OrderService {
 
         // save history
         OrderStatusHistory history = new OrderStatusHistory(id, currentStatus, newStatus);
-
         orderStatusHistoryRepository.save(history);
 
         return updatedOrder;

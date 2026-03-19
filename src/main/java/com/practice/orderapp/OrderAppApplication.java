@@ -28,12 +28,6 @@ public class OrderAppApplication {
 ✔ API documentation using Swagger UI
 ✔ Order status workflow with transition validation
 ✔ Order status history tracking (audit trail)
-
-Swagger available at:
-
-http://localhost:8080/swagger-ui/index.html
-
-To be added:
-
-1️⃣ Docker container
+✔ Docker container
+Swagger available at: http://localhost:8080/swagger-ui/index.html
 */
